@@ -78,7 +78,6 @@ function todoCreate(i) {
 
 // function : displaying the lists elements
 function todoRender() {
-    debugger
 
     let todoValue = todoInput.value.trim();
 
