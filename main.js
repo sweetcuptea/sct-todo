@@ -8,14 +8,16 @@ const todoCount = document.querySelector('.todo-count');
 const todoLocal = localStorage.getItem('data');
 let todoArray;
 
+// initiate localstorage lists
 if(todoLocal === null) {
     todoArray = [];
 } else {
-    todoArray = JSON.parse(todoLocal);    
+    todoArray = JSON.parse(todoLocal);
     for(i = 0; i < todoArray.length; i++) {
         todoCreate(i);
+        todoCountView(i);
     };
-
+    
     // todoRenderAll(todoArray); // method : 2
 };
 
