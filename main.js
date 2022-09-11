@@ -17,15 +17,7 @@ if(todoLocal === null) {
         todoCreate(i);
         todoCountView(i);
     };
-    
-    // todoRenderAll(todoArray); // method : 2
 };
-
-// function todoRenderAll(todoArray) { // method : 2
-//     for(i = 0;i < todoArray.length;i++){
-//         todoCreate(i);
-//     };
-// };
 
 // function : creating elements
 function todoCreate(i) {
@@ -52,13 +44,34 @@ function todoCreate(i) {
     todoList.appendChild(todoButtonCheck);
     todoList.appendChild(todoButtonRemove);
 
-    todoListText.innerHTML = todoArray[i];
+    todoListText.innerHTML = todoArray[i].task;
+
+    if(todoArray[i].check === true){
+        todoListText.classList.add('done');
+    } else {
+        todoListText.classList.remove('done');
+    }
+
+    function todoListTrue() {
+        todoListText.classList.add('done');
+        todoArray[i].check = true;
+        localStorage.setItem('data', JSON.stringify(todoArray));
+    }
+    function todoListFalse() {
+        todoListText.classList.remove('done');
+        todoArray[i].check = false;
+        localStorage.setItem('data', JSON.stringify(todoArray));
+    }
 
     // button action : marking list when the task done by clicking (button)
     todoButtonCheck.addEventListener('click', () => {
         for(i = 0; i < todoArray.length; i++) {
-            if(todoListText.innerText === todoArray[i]) {
-                todoListText.classList.toggle('done');
+            if(todoListText.innerText === todoArray[i].task) {
+                if(todoArray[i].check === true) {
+                    todoListFalse();
+                } else {
+                    todoListTrue();
+                }
             };
         };
     });
@@ -66,7 +79,7 @@ function todoCreate(i) {
     // button action : removing list by clicking (button)
     todoButtonRemove.addEventListener('click', () => {
         for(i = 0; i < todoArray.length; i++) {
-            if(todoListText.innerText === todoArray[i]) {
+            if(todoListText.innerText === todoArray[i].task) {
                 todoArray.splice(i,1);
                 todoListText.parentElement.remove()
                 localStorage.setItem('data', JSON.stringify(todoArray));
@@ -83,20 +96,16 @@ function todoRender() {
 
     let todoValue = todoInput.value.trim();
 
-    if(todoValue === '' || todoArray.includes(todoValue)) {
+    if(todoValue === '' || todoArray.some(target => target.task === todoValue)) {
         todoInput.setAttribute('placeholder', 'input your task here');
         todoInput.style.border = '2px solid var(--color-danger)';
         todoInput.style.backgroundColor = 'var(--color-danger)';
     } else {
-        todoArray.push(todoInput.value.replace(/^\s+|\s+$/gm,''));
+        todoArray.push({task: todoInput.value.replace(/^\s+|\s+$/gm,''), check: null})
         localStorage.setItem('data', JSON.stringify(todoArray));
         todoInput.setAttribute('placeholder', 'create a task');
         todoInput.style.border = '2px solid var(--color-200)';
         todoInput.style.backgroundColor = 'var(--color-100)';
-
-        // todoContainer.innerHTML = ''; // method : 2
-        // renderAll(todoArray); // method : 2
-        
         todoCreate(todoArray.length -1);
         todoInput.value = '';
         todoInput.focus();

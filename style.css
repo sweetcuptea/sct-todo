@@ -183,8 +183,6 @@ i {
     align-items:flex-start;
 }
 .todo-list-text {
-    width: 100%;
-    min-height: 42px;
     margin: 0 var(--spacing-100);
     padding: var(--spacing-500);
     font-size: var(--fs-000);
@@ -193,6 +191,9 @@ i {
     border:2px solid var(--color-200);
     border-radius: var(--br-200);
     word-wrap: break-word;
+}
+.todo-list p {
+    width: 80%;
 }
 
 /* responsive breakpoints */
