@@ -1,14 +1,14 @@
-// variable : selector
+// variable selector
 const todoInput = document.querySelector('#todo-input');
 const todoButton = document.querySelector('#todo-button');
 const todoContainer = document.querySelector('.todo-list-container');
 const todoCount = document.querySelector('.todo-count');
 
-// array : todo list
+// get 'data' from localstorage
 const todoLocal = localStorage.getItem('data');
 let todoArray;
 
-// initiate localstorage lists
+// check and initiate lists acording to localstorage 'data'
 if(todoLocal === null) {
     todoArray = [];
 } else {
@@ -19,64 +19,45 @@ if(todoLocal === null) {
     };
 };
 
-// function : creating elements
+// function : create a list elements with the button 'check' and 'remove'
 function todoCreate(i) {
 
-    // variable : create elements
+    // create : elements & variables
     let todoList = document.createElement('div');
     let todoListText = document.createElement('p');
     let todoButtonCheck = document.createElement('button');
     let todoButtonRemove = document.createElement('button');
-
-    // adding css classes to the elements
+    // add : classes
     todoList.classList.add('todo-list', 'flex-default');
     todoListText.classList.add('todo-list-text');
     todoButtonCheck.classList.add('todo-button','sucess');
     todoButtonRemove.classList.add('todo-button', 'danger');
-    
-    // create icons using html tag
+    // add : icon 
     todoButtonCheck.innerHTML = '<i class="ti ti-check"></i>';
     todoButtonRemove.innerHTML = '<i class="ti ti-trash"></i>';
-
-    // appending the elements
+    // appending child elements
     todoContainer.appendChild(todoList);
     todoList.appendChild(todoListText);
     todoList.appendChild(todoButtonCheck);
     todoList.appendChild(todoButtonRemove);
 
-    todoListText.innerHTML = todoArray[i].task;
-
-    if(todoArray[i].check === true){
-        todoListText.classList.add('done');
-    } else {
-        todoListText.classList.remove('done');
-    }
-
-    function todoListTrue() {
-        todoListText.classList.add('done');
-        todoArray[i].check = true;
-        localStorage.setItem('data', JSON.stringify(todoArray));
-    }
-    function todoListFalse() {
-        todoListText.classList.remove('done');
-        todoArray[i].check = false;
-        localStorage.setItem('data', JSON.stringify(todoArray));
-    }
-
-    // button action : marking list when the task done by clicking (button)
+    // button check : 'mark done' the list and set the condition of the list to localstorage
     todoButtonCheck.addEventListener('click', () => {
         for(i = 0; i < todoArray.length; i++) {
             if(todoListText.innerText === todoArray[i].task) {
                 if(todoArray[i].check === true) {
-                    todoListFalse();
+                    todoListText.classList.remove('done');
+                    todoArray[i].check = false;
                 } else {
-                    todoListTrue();
-                }
+                    todoListText.classList.add('done');
+                    todoArray[i].check = true;
+                };
+                localStorage.setItem('data', JSON.stringify(todoArray));
             };
         };
     });
 
-    // button action : removing list by clicking (button)
+    // button remove : removing the list from the parent elements
     todoButtonRemove.addEventListener('click', () => {
         for(i = 0; i < todoArray.length; i++) {
             if(todoListText.innerText === todoArray[i].task) {
@@ -89,9 +70,18 @@ function todoCreate(i) {
         };
     });
 
+    // displaying todo lists
+    todoListText.innerHTML = todoArray[i].task;
+
+    if(todoArray[i].check === true){
+        todoListText.classList.add('done');
+    } else {
+        todoListText.classList.remove('done');
+    }
+    
 };
 
-// function : displaying the lists elements
+// function : when the form input have a value to be inserted, then it will displayed on the lists
 function todoRender() {
 
     let todoValue = todoInput.value.trim();
@@ -101,7 +91,7 @@ function todoRender() {
         todoInput.style.border = '2px solid var(--color-danger)';
         todoInput.style.backgroundColor = 'var(--color-danger)';
     } else {
-        todoArray.push({task: todoInput.value.replace(/^\s+|\s+$/gm,''), check: null})
+        todoArray.push({task: todoInput.value.replace(/^\s+|\s+$/gm,''), check: false})
         localStorage.setItem('data', JSON.stringify(todoArray));
         todoInput.setAttribute('placeholder', 'create a task');
         todoInput.style.border = '2px solid var(--color-200)';
@@ -123,7 +113,7 @@ function todoCountView() {
     }
 };
 
-// input action : input todo by pressing (enter)
+// input enter : inputing the lists by pressing 'enter' on the keyboard
 todoInput.addEventListener('keypress', (e) => {
     if(e.keyCode === 13) {
         e.preventDefault();
@@ -132,11 +122,9 @@ todoInput.addEventListener('keypress', (e) => {
     };
 });
 
-// button action : input todo by clicking (button)
+// button click : inputing the lists by clicking the button
 todoButton.addEventListener('click', (e) => {
     e.preventDefault();
     todoRender();
     todoCountView();
 });
-
-
