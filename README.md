@@ -1,3 +1,3 @@
-# sct-todo-pratice
+# todo : vanilla javascript
 
-create a todo list app
+create a simple todo app with vanilla javascript
